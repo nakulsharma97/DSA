@@ -1,1 +1,69 @@
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int d) {
+        data = d;
+        left = right = null;
+    }
+}
+*/
+
+import java.util.*;
+
+class Solution {
+    ArrayList<Integer> boundaryTraversal(Node root) {
+        ArrayList<Integer> l = new ArrayList<>();
+
+        if (root == null) return l;
+        if (!isleaf(root)) l.add(root.data);
+
+        insertleft(l, root.left);
+        insertleaf(l, root);
+        insertright(l, root.right);
+
+        return l;
+    }
+
+    public boolean isleaf(Node root) {
+        return root != null && root.left == null && root.right == null;
+    }
+
+    public void insertleft(ArrayList<Integer> l, Node root) {
+        Node leftnode = root;
+        while (leftnode != null) {
+            if (isleaf(leftnode)) break;
+            l.add(leftnode.data);
+
+            if (leftnode.left != null) leftnode = leftnode.left;
+            else leftnode = leftnode.right;
+        }
+    }
+
+    public void insertright(ArrayList<Integer> l, Node root) {
+        Node rightnode = root;
+        Stack<Integer> s = new Stack<>();
+
+        while (rightnode != null) {
+            if (isleaf(rightnode)) break;
+            s.push(rightnode.data);
+
+            if (rightnode.right != null) rightnode = rightnode.right;
+            else rightnode = rightnode.left;
+        }
+
+        while (!s.isEmpty()) l.add(s.pop());
+    }
+
+    public void insertleaf(ArrayList<Integer> l, Node root) {
+        if (root == null) return;
+        if (isleaf(root)) {
+            l.add(root.data);
+            return;
+        }
+        insertleaf(l, root.left);
+        insertleaf(l, root.right);
+    }
+}
 
