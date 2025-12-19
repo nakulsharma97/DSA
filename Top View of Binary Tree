@@ -1,0 +1,48 @@
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int val) {
+        this.data = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+*/
+class Solution {
+    static class customeNode{
+        int col ;
+        Node node ;
+        customeNode(Node node , int col){
+            this.node = node ;
+            this.col = col ;
+        }
+    }
+    public ArrayList<Integer> topView(Node root) {
+        // code here
+        ArrayList<Integer> res = new ArrayList<>() ;
+        Queue<customeNode>  q = new LinkedList<>();
+        q.offer(new customeNode(root,0)) ;
+        TreeMap<Integer,Integer> map = new TreeMap<>() ;
+        while(!q.isEmpty()){
+            customeNode custom = q.poll() ;
+            Node node = custom.node ;
+            int col = custom.col ;
+            if(!map.containsKey(col)){
+                
+                map.put(col, node.data) ;
+            }
+            if(node.left != null){
+                q.offer(new customeNode(node.left, col -1)) ;
+            }
+            if(node.right != null){
+                q.offer(new customeNode(node.right , col +1)) ;
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            res.add(entry.getValue());
+        }
+        return res ;
+    }
+}
