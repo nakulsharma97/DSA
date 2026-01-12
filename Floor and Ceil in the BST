@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int data;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int val) { data = val; left = null, right = null }
+ * }
+ **/
+
+class Solution {
+    public List<Integer> floorCeilOfBST(TreeNode root, int key) {
+        Integer floor = null;
+        Integer ceil = null;
+        TreeNode curr = root;
+        while (curr != null) {
+            if (curr.data == key) {
+                floor = curr.data;
+                ceil = curr.data;
+                break;
+            }
+            else if (key < curr.data) {
+                ceil = curr.data;      // possible ceil
+                curr = curr.left;
+            }
+            else {
+                floor = curr.data;     // possible floor
+                curr = curr.right;
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        result.add(floor == null ? -1 : floor);
+        result.add(ceil == null ? -1 : ceil);
+
+        return result;
+    }
+}
