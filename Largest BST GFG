@@ -1,0 +1,47 @@
+// class Node
+// {
+//     int data;
+//     Node left, right;
+
+//     public Node(int d)
+//     {
+//         data = d;
+//         left = right = null;
+//     }
+// }
+
+
+// make the constructor of  INFO class 
+class Solution {
+static class Info{
+    int min = 0 ;
+    int max = 0 ;
+    int size = 0 ;
+    Info(int min , int max , int size){
+        this.min = min ;
+        this.max = max  ;
+        this.size = size ;
+    }
+}
+// Use the info class as the return variable
+static Info help(Node root){
+    if(root == null)
+    return new Info(Integer.MAX_VALUE , Integer.MIN_VALUE, 0);
+    Info left = help(root.left) ;
+    Info right = help(root.right) ;
+    if(root.data > left.max && root.data < right.min){
+        int currmin = Math.min(root.data, left.min);
+        int currmax =Math.max(root.data , right.max);
+        int currsize =1 + left.size + right.size ;
+        return new  Info(currmin , currmax , currsize) ;
+    }
+    return new Info(Integer.MIN_VALUE, Integer.MAX_VALUE, Math.max(left.size , right.size)) ;
+}
+
+// main class
+    static int largestBst(Node root) {
+        // Write your code here
+        return help(root).size ;
+        
+    }
+}
