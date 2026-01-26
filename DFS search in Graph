@@ -1,0 +1,19 @@
+class Solution {
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        ArrayList<Integer> res = new ArrayList<>() ;
+        int V = adj.size() ;
+        boolean[] visited  = new boolean[V] ; 
+        dfso(0 , visited , adj , res) ;
+        return res ;
+    }
+    public void dfso(int node , boolean visited[] ,ArrayList<ArrayList<Integer>> adj , ArrayList<Integer> res ){
+        visited[node] = true ;
+        res.add(node) ;
+        for(int neigh : adj.get(node)){
+            if(!visited[neigh]){
+                dfso(neigh , visited , adj , res) ;
+            }
+        }
+    }
+}
