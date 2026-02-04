@@ -1,41 +1,63 @@
 class Solution {
     public long maxSumTrionic(int[] nums) {
-        int n = nums.length; long MIN_VAL = Long.MIN_VALUE;
-        long max_result = MIN_VAL;
+        int state = 0;
+        long sum = 0;
+        long max =  Long.MIN_VALUE;
+        long contSum = 0;
 
-        for (int i = 0; i < n; i++) {
-            int left_idx = i, right_idx = i;
-            long center_sum = nums[left_idx];
-
-            while (right_idx + 1 < n && nums[right_idx + 1] < nums[right_idx]) {
-                center_sum += (long)nums[right_idx + 1];
-                right_idx++;
+        for (int i = 1; i < nums.length; i++){
+            if (state == 0){
+                if (nums[i] > nums[i-1]){
+                    sum = sum + nums[i] + nums[i-1];
+                    state = 1;
+                }
             }
-            if (right_idx == left_idx) continue;
-
-            int center_end = right_idx;
-
-            long left_part_sum = 0, right_part_sum = 0;
-            long max_left = MIN_VAL, max_right = MIN_VAL;
-
-            while (left_idx - 1 >= 0 && nums[left_idx - 1] < nums[left_idx]) {
-                left_part_sum += (long)nums[left_idx - 1];
-                max_left = Math.max(max_left, left_part_sum);
-                left_idx--;
+            else if (state == 1){
+                if (nums[i] > nums[i-1]){
+                    sum =Math.max(sum + nums[i], nums[i] + nums[i-1]);
+                }
+                else if (nums[i] == nums[i-1]){
+                    sum = 0;
+                    state = 0;
+                }
+                else {
+                    sum = sum + nums[i];
+                    state = 2;
+                }
             }
-            if (left_idx == i) continue;
-
-            while (right_idx + 1 < n && nums[right_idx + 1] > nums[right_idx]) {
-                right_part_sum += (long)nums[right_idx + 1];
-                max_right = Math.max(max_right, right_part_sum);
-                right_idx++;
+            else if (state == 2){
+                contSum = 0;
+                if (nums[i] < nums[i-1]){
+                    sum = sum + nums[i];
+                }
+                else if (nums[i] == nums[i-1]){
+                    sum = 0;
+                    state = 0;
+                }
+                else {
+                    sum = sum + nums[i];
+                    max = Math.max(max,sum);
+                    contSum = contSum + nums[i] + nums[i-1];
+                    state = 3;
+                }
             }
-            if (right_idx == center_end) continue;
-            
-            i = right_idx - 1;
-            max_result = Math.max(max_result, max_left + max_right + center_sum);
+            else {
+                if (nums[i] > nums[i-1]){
+                    sum = sum + nums[i];
+                    contSum = Math.max(contSum + nums[i],nums[i] + nums[i-1]);
+                    max = Math.max(max,sum);
+                }
+                else if (nums[i] == nums[i-1]){
+                    sum = 0;
+                    state = 0;
+                }
+                else {
+                    sum = contSum + nums[i];
+                    state = 2;
+                }
+            }
+
         }
-        
-        return max_result;
+        return max;
     }
 }
