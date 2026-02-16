@@ -2,18 +2,15 @@ class Solution {
     class Pair implements Comparable<Pair> {
         String video;
         int freq;
-
         Pair(String video, int freq) {
             this.video = video;
             this.freq = freq;
         }
-
         public int compareTo(Pair that) {
             if (this.freq == that.freq) {
-
-                return this.video.compareTo(that.video);
+                return this.video.compareTo(that.video); // sort according to the alphabet 
             }
-            return this.freq - that.freq;
+            return this.freq - that.freq; // sort according to the frequency
         }
     }
 
@@ -53,12 +50,12 @@ class Solution {
         // all this is CUSTOM SORTING
         List<Pair> sortedvideo = new ArrayList<>();
         for (String video : freq.keySet()) {
-            sortedvideo.add(new Pair(video, freq.get(video)));
+            sortedvideo.add(new Pair(video, freq.get(video))); // adding the vide and freq is the sortedvideo list
         }
-        Collections.sort(sortedvideo);
+        Collections.sort(sortedvideo); // least freq comes first 
         List<String> res = new ArrayList<>();
         for (Pair pair : sortedvideo) {
-            res.add(pair.video);
+            res.add(pair.video);  // this is adding only the video name 
         }
         return res;
     }
