@@ -35,13 +35,13 @@ class Solution {
         List<List<String>> res = new ArrayList<>();
         HashSet<String> visited = new HashSet<>();
         for (List<String> account : accounts) {
+            String name = account.get(0) ;
             String firstm = account.get(1);
             if (!visited.contains(firstm)) {
                 List<String> subs = new ArrayList<>();
-
                 dfs(firstm, visited, map, subs);
                 Collections.sort(subs);
-                subs.add(0, account.get(0));
+                subs.add(0 , account.get(0));
                 res.add(subs);
             }
 
