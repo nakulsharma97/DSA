@@ -24,7 +24,7 @@ class Solution {
                 for (int[] dir : direction) {
                     int r = cell[0] + dir[0];
                     int c = cell[1] + dir[1];
-                    if (r >= 0 && r < row && c >= 0 && c < col && mat[r][c] > mat[cell[0]][cell[1]]  ) {
+                    if (r >= 0 && r < row && c >= 0 && c < col && mat[r][c] > mat[cell[0]][cell[1]] + 1  ) {
                         q.offer(new int[] { r, c });
                         mat[r][c] = mat[cell[0]][cell[1]] +  1;
 
