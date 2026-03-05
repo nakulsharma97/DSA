@@ -1,18 +1,17 @@
 class Solution {
     public int minOperations(String s) {
-        int mismatchA = 0; // pattern: 010101...
-        int mismatchB = 0; // pattern: 101010...
-
-        for (int i = 0; i < s.length(); i++) {
-            char expectedA = (i % 2 == 0) ? '0' : '1';
-
-            if (s.charAt(i) != expectedA) {
-                mismatchA++;
-            } else {
-                mismatchB++;
-            }
+        int misA= 0  ;// 01010
+        int misB = 0  ;// 1010101 
+        int n = s.length() ;
+        for(int i = 0 ; i < n ;i++){
+         char expect = (i % 2 == 0)? '0' : '1' ;
+          if(expect != s.charAt(i)) {
+            misB++ ;
+          }
+          else {
+            misA++ ;
+          }
         }
-
-        return Math.min(mismatchA, mismatchB);
+        return Math.min(misB , misA);
     }
 }
