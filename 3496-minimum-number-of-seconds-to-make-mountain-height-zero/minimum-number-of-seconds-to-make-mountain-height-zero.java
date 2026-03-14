@@ -1,21 +1,13 @@
 class Solution {
     public boolean isPossible(long time, int height, int[] worker) {
-
+long totalheight = 0 ;
         // now check
-        for (int i = 0; i < worker.length; i++) {
-            long j = 1L;
-            long curr = 0;
-            while (height > 0 && curr + j * worker[i] <= time) {
-                curr += j * worker[i];
-                j++;
-                height--;
-            }
-            if (height == 0)
-                return true;
-
-        }
-
-return height == 0 ? true : false ;
+       for(int ele : worker){
+        long k = (long)((Math.sqrt(1 + (8.0 * time)/ele) -1) / 2) ;
+totalheight  += k ;
+if(totalheight >= height)  return true ;
+       }
+       return false ;
     }
 
     public long minNumberOfSeconds(int mountainHeight, int[] workerTimes) {
