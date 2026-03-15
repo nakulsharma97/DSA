@@ -1,4 +1,5 @@
 class Fancy {
+    // this problem is hard due to modules we use especially in the appened , and binary exponential binary power 
     long MOD = 1000000007;
     ArrayList<Long> seq;
     long add = 0 ;
