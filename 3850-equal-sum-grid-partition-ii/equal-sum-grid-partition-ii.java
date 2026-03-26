@@ -1,60 +1,55 @@
-import java.util.*;
-
 class Solution {
+   
 
     public boolean canPartitionGrid(int[][] grid) {
-        long total = 0;
-
-        // Calculate total sum
-        for (int[] row : grid) {
-            for (int val : row) {
-                total += val;
+        long total = 0 ;
+        int m = grid.length;
+        int n = grid[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                total += grid[i][j];
             }
         }
 
-        // Check original and reversed rows
-        if (check(grid, total) || check(reverseRows(grid), total)) {
+        if (check(grid, total) || check(reverse(grid), total)) {
             return true;
         }
-
-        // Transpose and check again
-        int[][] transposed = transpose(grid);
-        return check(transposed, total) || check(reverseRows(transposed), total);
+        int[][] transpos = transpose(grid);
+        return check(transpos, total) || check(reverse(transpos), total);
     }
 
-    private boolean check(int[][] A, long total) {
+    public boolean check(int[][] A, long total) {
         Set<Long> seen = new HashSet<>();
+        int m = A.length;
+        int n = A[0].length;
         long top = 0;
-
-        int rows = A.length;
-        int cols = A[0].length;
-
-        for (int i = 0; i < rows; i++) {
-
-            // Add row values
-            for (int val : A[i]) {
-                seen.add((long) val);
-                top += val;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                top += (long) A[i][j];
+                seen.add((long) A[i][j]);
             }
-
             long bottom = total - top;
             long diff = top - bottom;
+            if (diff == 0)
+                return true;
 
-            // Case 1: Perfect partition
-            if (diff == 0) return true;
-
-            // Case 2: Edge conditions
-            if (diff == A[0][0] || diff == A[0][cols - 1] || diff == A[i][0]) {
+            if (diff == A[0][0] || diff == A[0][n - 1] || diff == A[i][0]) {
                 return true;
             }
-
-            // Case 3: Removing one element from top part
-            if (cols > 1 && i > 0 && seen.contains(diff)) {
-                return true;
+            if(n > 1  && i > 0 && seen.contains(diff)){
+                return true ;
             }
         }
-
         return false;
+    }
+
+    private int[][] reverse(int[][] A) {
+        int[][] res = new int[A.length][];
+        for (int i = 0; i < A.length; i++) {
+            res[i] = A[A.length - 1 - i];
+        }
+
+        return res;
     }
 
     private int[][] transpose(int[][] A) {
@@ -65,16 +60,6 @@ class Solution {
             for (int j = 0; j < c; j++) {
                 res[j][i] = A[i][j];
             }
-        }
-
-        return res;
-    }
-
-    private int[][] reverseRows(int[][] A) {
-        int[][] res = new int[A.length][];
-
-        for (int i = 0; i < A.length; i++) {
-            res[i] = A[A.length - 1 - i];
         }
 
         return res;
