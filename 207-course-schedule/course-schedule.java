@@ -1,33 +1,33 @@
 class Solution {
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < numCourses; i++) adj.add(new ArrayList<>());
+    public boolean canFinish(int n, int[][] prerequisites) {
+        List<Integer>[] adj = new ArrayList[n];
+        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
 
-        for (int[] pre : prerequisites)
-            adj.get(pre[1]).add(pre[0]);
+        // build graph
+        for (int[] p : prerequisites) {
+            adj[p[1]].add(p[0]);
+        }
 
-        int[] state = new int[numCourses];
+        int[] state = new int[n]; // 0=unvisited, 1=visiting, 2=done
 
-        for (int i = 0; i < numCourses; i++) {
-            if (state[i] == 0 && dfs(i, adj, state)) return false;
+        for (int i = 0; i < n; i++) {
+            if (dfs(i, adj, state)) return false;
         }
 
         return true;
     }
 
-    private boolean dfs(int node, List<List<Integer>> adj, int[] state) {
-        state[node] = 1; // visiting
+    private boolean dfs(int node, List<Integer>[] adj, int[] state) {
+        if (state[node] == 1) return true;   // cycle
+        if (state[node] == 2) return false;  // already safe
 
-        for (int next : adj.get(node)) {
-            if (state[next] == 0) {
-                if (dfs(next, adj, state)) return true;
-            } 
-            else if (state[next] == 1) {
-                return true; // cycle found
-            }
+        state[node] = 1; // mark visiting
+
+        for (int next : adj[node]) {
+            if (dfs(next, adj, state)) return true;
         }
 
-        state[node] = 2; // visited
+        state[node] = 2; // mark done
         return false;
     }
 }
