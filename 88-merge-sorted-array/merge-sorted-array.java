@@ -7,6 +7,7 @@ class Solution {
         while (nidx >= 0) {
             if (midx >= 0 && nums1[midx] > nums2[nidx]) {
                 nums1[right] = nums1[midx];
+                nums1[midx] = 0 ;
                 midx--;
             } else {
                 nums1[right] = nums2[nidx];
