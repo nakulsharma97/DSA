@@ -26,7 +26,7 @@ class Solution {
         // process T
         for (int i = 0; i < n; i++) {
             if (str1.charAt(i) == 'T') {
-               
+                if (i + m > N) return "";  // 🔥 FIX
 
                 int i_ = i;
                 for (int j = 0; j < m; j++) {
