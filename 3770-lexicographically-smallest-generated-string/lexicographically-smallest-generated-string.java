@@ -27,7 +27,6 @@ class Solution {
         for (int i = 0; i < n; i++) {
             if (str1.charAt(i) == 'T') {
                 if (i + m > N) return "";  // 🔥 FIX
-
                 int i_ = i;
                 for (int j = 0; j < m; j++) {
                     if (word[i_] != '$' && word[i_] != str2.charAt(j)) {
@@ -51,7 +50,6 @@ class Solution {
         for (int i = 0; i < n; i++) {
             if (str1.charAt(i) == 'F') {
 
-                if (i + m > N) continue;  // 🔥 FIX
 
                 if (isSame(word, str2, i, m)) {
 
