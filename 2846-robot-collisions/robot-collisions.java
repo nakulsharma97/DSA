@@ -21,6 +21,9 @@ class Solution {
             if (directions.charAt(index) == 'R') {
                 stack.push(index);
             } else {
+                if(stack.isEmpty()){
+                    stack.push(index) ;
+                }
                 boolean isSurvived = true;
                 while (!stack.isEmpty()) {
                     int node = stack.peek();
