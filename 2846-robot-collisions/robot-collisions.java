@@ -1,68 +1,64 @@
 class Solution {
     public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
         int n = positions.length;
-        Integer indexes[] = new Integer[n];
+        Integer[] indexes = new Integer[n];
         for (int i = 0; i < n; i++) {
-            indexes[i] = i; // 1 ,2 ,3 ,4 
+            indexes[i] = i;
         }
-        // 2 ,4 = negative (no swap) 
-        // 4 , 2 = swap , positive
         Arrays.sort(indexes, new Comparator<Integer>() {
             public int compare(Integer a, Integer b) {
-                // increasing order 
-                // neg or 0 , no swapping ;
-                // positive , swap ;
                 return positions[a] - positions[b];
+
             }
         });
         List<Integer> res = new LinkedList<>();
-        Stack<Integer> stack = new Stack<>();
-        for (int index : indexes) {
-            if (directions.charAt(index) == 'R') {
-                stack.push(index);
+        Stack<Integer> st = new Stack<>();
+       for(int i : indexes){
+            if (directions.charAt(i) == 'R') {
+                st.push(i);
             } else {
-                if(stack.isEmpty()){
-                    stack.push(index) ;
+                if (st.isEmpty()) {
+                    st.push(i);
                 }
-                boolean isSurvived = true;
-                while (!stack.isEmpty()) {
-                    int node = stack.peek();
+                boolean survive = false;
+                while (!st.isEmpty()) {
+                    int node = st.peek();
                     if (directions.charAt(node) == 'L') {
-                        isSurvived = true;
+                        survive = true;
                         break;
 
-                    } else if (healths[node] > healths[index]) {
-                        isSurvived = false;
-                        healths[node] -= 1 ;
-                        healths[index] = 0;
-                        break ;
                     }
-                    else if (healths[node] < healths[index]) {
-                        isSurvived = true;
-                        healths[node] = 0 ;
-                        stack.pop() ;
-                        healths[index] -= 1;
-                      
-                    }
-                    else {
-                        isSurvived = false ;
-                        healths[node] = 0 ;
-                        healths[index] = 0 ;
-                        stack.pop() ;
-                        break ;
+
+                    if (healths[node] > healths[i]) {
+                        healths[node] -= 1;
+                        healths[i] = 0;
+                        survive = false;
+                        break;
+                    } else if (healths[node] == healths[i]) {
+                        survive = false;
+                        healths[node] = 0;
+                        healths[i] = 0;
+                        st.pop();
+                        break;
+                    } else if (healths[node] < healths[i]) {
+                        survive = true;
+                        healths[i] -= 1;
+                        healths[node] = 0;
+                        st.pop();
 
                     }
+
                 }
-                if (isSurvived) {
-                    stack.push(index); // left ddirection 
+                if(survive){
+                    st.push(i) ;
                 }
             }
         }
-        for(int i = 0 ;i < n ;i++){
-            if(healths[i] > 0){
-                res.add(healths[i]) ;
-            }
+        for( int i = 0 ;i <n;i++)
+    {
+        if (healths[i] > 0) {
+            res.add(healths[i]);
         }
-return res ;
     }
-}
+    return res;
+}}
