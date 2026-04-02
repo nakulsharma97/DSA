@@ -18,7 +18,8 @@ class Solution {
         if (dp[i][j][neu] != null) return dp[i][j][neu];
 
         // Take
-        int take = coins[i][j] + Math.max(
+        int take  = 0 ;
+        take = coins[i][j] + Math.max(
                 solve(coins, i + 1, j, neu),
                 solve(coins, i, j + 1, neu)
         );
