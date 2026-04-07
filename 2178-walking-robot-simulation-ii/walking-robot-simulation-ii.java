@@ -1,53 +1,76 @@
 class Robot {
-    List<int[]> cells ;
-    int count ;
+    int x, y;
+    int w, h;
+    int dir;
+    int per;
 
     public Robot(int width, int height) {
-        cells = new ArrayList<>() ;
-        count = 0 ;
-        cells.add(new int[]{0 , 0 , 3}) ;
-        for(int i =1 ; i < width ; i++){
-            cells.add(new int[]{i , 0 , 0}) ; //"East"
-        }
-        for(int i = 1 ; i < height ;i++){
-            cells.add(new int[]{width-1 , i ,1}) ; // "north"
-        }
-        for(int i = width -2 ; i >= 0 ;i--){
-            cells.add(new int[]{i ,height -1 , 2}) ;
-        }
-        for(int i = height -2 ; i > 0 ;i--){
-            cells.add(new int[]{0 ,  i , 3}) ;
-        }
+        this.w = width;
+        this.h = height;
+        this.x = 0;
+        this.y = 0;
+        this.dir = 0;
+        per = 2 * (w + h) - 4;
     }
-    
-    public void step(int num) {
-        count += num ;
-        
-    }
-    
-    public int[] getPos() {
-        int index = count % cells.size() ;
-        int x = cells.get(index)[0];
-        int y = cells.get(index)[1];
-        return new int[]{x ,y} ;
-        
-    }
-    
-    public String getDir() {
-    if( count == 0){
-        return "East" ;
-    }
-        int index = count% cells.size() ;
-          if (index == 0) 
-          return "South";
 
-        int dir = cells.get(index)[2] ;
-        if(dir == 0) return "East" ;
-        else if(dir == 1) return "North" ;
-        else if(dir == 2) return "West" ;
-        else 
-        return "South" ;
+    public void step(int num) {
+        if (per == 0)
+            return;
+        num = num % per;
+        if (num == 0) {
+            if (x == 0 && y == 0) {
+                dir = 3 ;
+            }
+            return ;
+        }
+        while( num > 0){
+            if(dir ==0){
+                int move = Math.min(num , w - 1 - x); 
+                    x +=move ;
+                    num = num - move ;
+                    if(num > 0) {
+                        dir = 1 ;
+                    }
+                }
+                else if(dir == 1){
+                    int move = Math.min(num ,h - 1 - y);
+                    y +=move ;
+                    num = num - move ;
+                    if(num > 0) {
+                        dir = 2 ;
+                    }
+                }
+                else if(dir == 2){
+                    int move = Math.min(num , x);
+                    x -=move ;
+                    num = num - move ;
+                    if(num > 0) {
+                        dir = 3 ;
+                    }
+                }
+                else if(dir == 3){
+                    int move = Math.min(num , y);
+                    y -=move ;
+                    num = num - move ;
+                    if(num > 0) {
+                        dir = 0 ;
+                    }
+                }
+            }
         
+
+    }
+
+    public int[] getPos() {
+return new int[]{x,y} ;
+    }
+
+    public String getDir() {
+         if (dir == 0) return "East";
+        if (dir == 1) return "North";
+        if (dir == 2) return "West";
+        return "South";
+
     }
 }
 
