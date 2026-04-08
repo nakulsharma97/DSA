@@ -1,31 +1,25 @@
 class Solution {
     public int compress(char[] chars) {
-        int n = chars.length;
-        int i = 0;      // read pointer
-        int index = 0;  // write pointer
+        int n = chars.length ;
+        int i = 0 ;
+        int ind =  0 ;
+        while( i < n){
+            char curr = chars[i] ;
+            int count = 0 ;
+             while( i < n && curr == chars[i]){
+                i++ ;
+                count++ ;
+             }
+             chars[ind++] = curr ;
+             if( count > 1){
+                String st = String.valueOf(count) ;
+                for(char s : st.toCharArray()){
+                    chars[ind++] = s ;
 
-        while (i < n) {
-            char current = chars[i];
-            int count = 0;
-
-            // count frequency
-            while (i < n && chars[i] == current) {
-                i++;
-                count++;
-            }
-
-            // write character
-            chars[index++] = current;
-
-            // write count if >1
-            if (count > 1) {
-                String cnt = String.valueOf(count);
-                for (char c : cnt.toCharArray()) {
-                    chars[index++] = c;
                 }
-            }
-        }
+             }
 
-        return index;
+        }
+        return ind ;
     }
 }
