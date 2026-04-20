@@ -15,19 +15,20 @@
  */
 class Solution {
     public boolean leafSimilar(TreeNode root1, TreeNode root2) {
-        List<Integer> leave1 = new LinkedList<>() ;
-        List<Integer> leave2 = new LinkedList<>() ;
-        height(root1, leave1) ;
-        height(root2, leave2) ;
-        return leave1.equals(leave2)  ;
+        List<Integer> leaf1 = new ArrayList<>() ;
+        List<Integer> leaf2 = new ArrayList<>() ;
+        height(leaf1 , root1) ;
+        height(leaf2 , root2)  ;
+        return leaf1.equals(leaf2) ? true : false ;
+
     }
-    public void height(TreeNode l , List<Integer> leave){
-     if( l == null) return  ;
-     if(l.left ==  null && l.right == null ){
-     leave.add(l.val) ;
-     return ;
-     }  
-     height(l.left , leave) ;
-     height(l.right , leave) ;
+    public void height(List<Integer> leaf , TreeNode root){
+        if(root == null) return ;
+        if(root.right == null && root.left == null){
+            leaf.add(root.val) ;
+            return ;
+        }
+        height(leaf , root.right) ;
+        height(leaf ,root .left) ;
     }
 }
