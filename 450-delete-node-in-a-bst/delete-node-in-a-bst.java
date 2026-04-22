@@ -15,31 +15,36 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-        if (root == null)
-            return null;
-        if (root.val > key) {
-            root.left = deleteNode(root.left, key);
+        if(root == null) return null ;
+        
+        if(root.val < key){
+            root.right = deleteNode(root.right , key);
         }
-       else if (root.val < key) {
-            root.right = deleteNode(root.right, key);
-        }
-        else { 
-            // fount the root 
-            if(root.right == null) return root.left ;
-            else if(root.left == null) return root.right ;
+       else if(root.val > key){
+            root.left =  deleteNode(root.left , key) ;
 
-            root.val =minValue(root.right) ;// it is delete the value we want to delete , and setting the minimum value of the right tree
-            root.right = deleteNode(root.right , root.val) ; // it will delete the minvalue from the right tree ;
+        }
+        else  {
+            if(root.left == null){
+                return root.right ;
+            }
+           else if(root.right == null){
+                return root.left ;
+            }
+            root.val = mini(root.right) ;
+            root.right = deleteNode(root.right , root.val) ;
 
         }
         return root ;
     }
-    public int minValue(TreeNode root){
-        int minv = root.val;
+    public int mini(TreeNode root){
+        if(root == null) return  0 ;
+        int min = root.val ;
         while(root.left != null){
-            minv = root.left.val ;
+            min = root.left.val ;
             root = root.left ;
+
         }
-        return minv ;
+        return min ;
     }
 }
