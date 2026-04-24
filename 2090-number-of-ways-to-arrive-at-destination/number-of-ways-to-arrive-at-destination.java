@@ -10,20 +10,17 @@ class Solution {
             graph.get(u).add(new int[] { v, time });
             graph.get(v).add(new int[] { u, time });
         }
-
         long[] dist = new long[n];
         int[] ways = new int[n];
         Arrays.fill(dist, Long.MAX_VALUE);
         dist[0] = 0;
         ways[0] = 1;
-        // a[0] = distance
+        // a[0] = distance , node
         PriorityQueue<long[]> pq = new PriorityQueue<>(
                 (a, b) -> Long.compare(a[0], b[0]));
 
         pq.offer(new long[] { 0, 0 });
-
         int MOD = 1_000_000_007;
-
         while (!pq.isEmpty()) {
             long[] curr = pq.poll();
             long d = curr[0];
@@ -42,7 +39,6 @@ class Solution {
                 }
             }
         }
-
-        return ways[n - 1];
+return ways[n-1] ;
     }
 }
