@@ -1,50 +1,57 @@
+import java.util.*;
+
 class Solution {
 
-    // directions: up, right, down, left
-    int[][] dirs = {{-1,0},{0,1},{1,0},{0,-1}};
-    
+    int m, n;
+
+    // SAME format as your code (no change)
+    int[][][] directions = {
+        {}, // 0 unused
+        {{0, -1}, {0, 1}},   // 1
+        {{-1, 0}, {1, 0}},   // 2
+        {{0, -1}, {1, 0}},   // 3
+        {{0, 1}, {1, 0}},    // 4
+        {{0, -1}, {-1, 0}},  // 5
+        {{-1, 0}, {0, 1}}    // 6
+    };
+
     public boolean hasValidPath(int[][] grid) {
-        int m = grid.length, n = grid[0].length;
+        m = grid.length;
+        n = grid[0].length;
+
         boolean[][] vis = new boolean[m][n];
         return dfs(grid, 0, 0, vis);
     }
 
-    private boolean dfs(int[][] grid, int r, int c, boolean[][] vis) {
-        int m = grid.length, n = grid[0].length;
-        
-        if (r == m - 1 && c == n - 1) return true;
-        
-        vis[r][c] = true;
+    private boolean dfs(int[][] grid, int i, int j, boolean[][] vis) {
 
-        for (int d : getDirections(grid[r][c])) {
-            int nr = r + dirs[d][0];
-            int nc = c + dirs[d][1];
+        if (i == m - 1 && j == n - 1)
+            return true;
 
-            if (nr < 0 || nc < 0 || nr >= m || nc >= n || vis[nr][nc]) continue;
+        vis[i][j] = true;
 
-            // check reverse connection
-            if (isConnected(grid[nr][nc], (d + 2) % 4)) {
-                if (dfs(grid, nr, nc, vis)) return true;
+        for (int[] dir : directions[grid[i][j]]) {
+
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+
+            if (ni < 0 || nj < 0 || ni >= m || nj >= n || vis[ni][nj])
+                continue;
+
+            // check reverse connection (same logic, cleaner)
+            if (canGoBack(grid, ni, nj, i, j)) {
+                if (dfs(grid, ni, nj, vis))
+                    return true;
             }
         }
         return false;
     }
 
-    private int[] getDirections(int type) {
-        switch (type) {
-            case 1: return new int[]{1, 3}; // right, left
-            case 2: return new int[]{0, 2}; // up, down
-            case 3: return new int[]{3, 2}; // left, down
-            case 4: return new int[]{1, 2}; // right, down
-            case 5: return new int[]{3, 0}; // left, up
-            case 6: return new int[]{1, 0}; // right, up
-        }
-        return new int[]{};
-    }
+    private boolean canGoBack(int[][] grid, int ni, int nj, int i, int j) {
 
-    private boolean isConnected(int type, int dir) {
-        for (int d : getDirections(type)) {
-            if (d == dir) return true;
+        for (int[] back : directions[grid[ni][nj]]) {
+            if (ni + back[0] == i && nj + back[1] == j)
+                return true;
         }
         return false;
     }
