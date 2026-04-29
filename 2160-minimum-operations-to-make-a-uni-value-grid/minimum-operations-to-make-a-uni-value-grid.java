@@ -1,34 +1,29 @@
 class Solution {
     public int minOperations(int[][] grid, int x) {
-        int n = grid.length, m = grid[0].length;
-        int N = n * m;
-        int[] freq = new int[10001];
-        int min = grid[0][0], max = min;
-        for (int[] row : grid) {
-            for (int val : row) {
-                if ((val - grid[0][0]) % x != 0)
-                    return -1;
-                freq[val]++;
-                min = Math.min(min, val);
-                max = Math.max(max, val);
+        int m = grid.length ;
+        int n = grid[0].length ;
+        int freq[] = new int[m*n] ;
+        int k = 0 ;
+        for(int i = 0 ;i < m ; i++){
+            for(int j = 0 ;j < n ; j++){
+               freq[k] = grid[i][j]  ;
+                k++ ;
             }
+
         }
-
-        int target = (N + 1) / 2;
-        int acc = 0, median = min;
-
-        for (int i = min; i <= max; i += x) {
-            acc += freq[i];
-            if (acc >= target) {
-                median = i;
-                break;
+        Arrays.sort(freq) ;
+        int val = (m*n) / 2 ;
+        int target = freq[val] ;
+        int result = 0 ;
+        for(int num : freq){
+            if(num % x != target % x){
+                return -1 ;
             }
+            else {
+                result += Math.abs(num - target) / x;
+             }
+
         }
-
-        int ops = 0;
-        for (int i = min; i <= max; i += x)
-            ops += Math.abs(i - median) / x * freq[i];
-
-        return ops;
+        return result ;
     }
 }
