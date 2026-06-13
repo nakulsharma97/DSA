@@ -1,25 +1,28 @@
-import java.util.*;
-
 class LRUCache {
-
-    private final int capacity;
-    private final LinkedHashMap<Integer, Integer> cache;
+    int capacity;
+    LinkedHashMap<Integer, Integer> l = new LinkedHashMap<>();
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.cache = new LinkedHashMap<>(capacity, 0.75f, true) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
-                return size() > capacity;
-            }
-        };
     }
 
     public int get(int key) {
-        return cache.getOrDefault(key, -1);
+        if (!l.containsKey(key)) {
+            return -1;
+        }
+        int value = l.get(key);
+        l.remove(key);
+        l.put(key, value);
+        return value;
     }
 
     public void put(int key, int value) {
-        cache.put(key, value);
+        if (l.containsKey(key)) {
+            l.remove(key);
+        } else if (l.size() == capacity) {
+            int lru = l.keySet().iterator().next(); // first key = LRU
+            l.remove(lru);
+        }
+        l.put(key, value);
     }
 }
