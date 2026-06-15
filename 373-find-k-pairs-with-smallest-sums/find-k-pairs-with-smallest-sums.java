@@ -3,14 +3,14 @@ import java.util.*;
 class Solution {
 
     static class Pair {
+        int sum;
         int i;
         int j;
-        int sum;
 
-        Pair(int i, int j, int sum) {
+        Pair(int sum, int i, int j) {
+            this.sum = sum;
             this.i = i;
             this.j = j;
-            this.sum = sum;
         }
     }
 
@@ -25,9 +25,10 @@ class Solution {
         PriorityQueue<Pair> minHeap =
                 new PriorityQueue<>((a, b) -> a.sum - b.sum);
 
-        for (int i = 0; i < Math.min(nums1.length, k); i++) {
-            minHeap.offer(new Pair(i, 0, nums1[i] + nums2[0]));
-        }
+        Set<String> visited = new HashSet<>();
+
+        minHeap.offer(new Pair(nums1[0] + nums2[0], 0, 0));
+        visited.add("0,0");
 
         while (k-- > 0 && !minHeap.isEmpty()) {
 
@@ -38,10 +39,26 @@ class Solution {
 
             result.add(Arrays.asList(nums1[i], nums2[j]));
 
-            if (j + 1 < nums2.length) {
+            // (i, j + 1)
+            if (j + 1 < nums2.length &&
+                !visited.contains(i + "," + (j + 1))) {
+
                 minHeap.offer(
-                    new Pair(i, j + 1, nums1[i] + nums2[j + 1])
+                    new Pair(nums1[i] + nums2[j + 1], i, j + 1)
                 );
+
+                visited.add(i + "," + (j + 1));
+            }
+
+            // (i + 1, j)
+            if (i + 1 < nums1.length &&
+                !visited.contains((i + 1) + "," + j)) {
+
+                minHeap.offer(
+                    new Pair(nums1[i + 1] + nums2[j], i + 1, j)
+                );
+
+                visited.add((i + 1) + "," + j);
             }
         }
 
