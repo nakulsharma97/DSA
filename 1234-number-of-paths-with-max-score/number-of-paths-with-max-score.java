@@ -1,85 +1,93 @@
 class Solution {
-
     int n;
-    int MOD = 1000000007;
+    int MOD = 1_000_000_007;
+    int[][] tScore;
+    int[][] tPaths;
 
-    Integer[][] maxScore;
-    Integer[][] ways;
-
-    public int getint(char ch) {
-        return (ch == 'S' || ch == 'E') ? 0 : ch - '0';
+    private int getIntFromChar(char ch) {
+        return ch != 'S' ? ch - '0' : 0;
     }
 
-    public boolean isValid(int i, int j, List<String> board) {
-        return i >= 0 && i < n && j >= 0 && j < n &&
-                board.get(i).charAt(j) != 'X';
+    private boolean isValid(int i, int j, List<String> board) {
+        return i >= 0 && i < n && j >= 0 && j < n && board.get(i).charAt(j) != 'X';
     }
 
-    public int[] solve(int i, int j, List<String> board) {
+    private int[] solve(int i, int j, List<String> board) {
+        char here = board.get(i).charAt(j);
 
-        if (!isValid(i, j, board))
-            return new int[]{0, 0};
-
-        if (board.get(i).charAt(j) == 'E')
+        if (here == 'E')
             return new int[]{0, 1};
+        if (here == 'X')
+            return new int[]{0, 0}; 
 
-        if (maxScore[i][j] != null)
-            return new int[]{maxScore[i][j], ways[i][j]};
+        if (tScore[i][j] != -1)
+            return new int[]{tScore[i][j], tPaths[i][j]};
 
-        int bestScore = -1;
-        int totalWays = 0;
+        int upScore = 0,   upPaths = 0;
+        int leftScore = 0, leftPaths = 0;
+        int diagScore = 0, diagPaths = 0;
+        char ch = here;
 
-        int[][] dir = {{-1, 0}, {0, -1}, {-1, -1}};
+        if (isValid(i - 1, j, board)) {
+            int[] r = solve(i - 1, j, board);
+            upScore = r[0];
+            upPaths = r[1];
+            if (upPaths > 0)
+                upScore += getIntFromChar(ch);
+        }
+        if (isValid(i, j - 1, board)) {
+            int[] r = solve(i, j - 1, board);
+            leftScore = r[0];
+            leftPaths = r[1];
+            if (leftPaths > 0)
+                leftScore += getIntFromChar(ch);
+        }
+        if (isValid(i - 1, j - 1, board)) {
+            int[] r = solve(i - 1, j - 1, board);
+            diagScore = r[0];
+            diagPaths = r[1];
+            if (diagPaths > 0)
+                diagScore += getIntFromChar(ch);
+        }
 
-        for (int[] d : dir) {
-
-            int ni = i + d[0];
-            int nj = j + d[1];
-
-            if (!isValid(ni, nj, board))
-                continue;
-
-            int[] res = solve(ni, nj, board);
-
-            int score = res[0];
-            int path = res[1];
-
-            if (path == 0)
-                continue;
-
-            score += getint(board.get(i).charAt(j));
-
-            if (score > bestScore) {
-                bestScore = score;
-                totalWays = path;
-            } else if (score == bestScore) {
-                totalWays = (totalWays + path) % MOD;
+        int bestScore, bestPaths;
+        if (upScore == leftScore && leftScore == diagScore) {
+            bestScore = upScore;
+            bestPaths = upPaths + leftPaths + diagPaths;
+        } else if (upScore == leftScore) {
+            bestScore = upScore;
+            bestPaths = upPaths + leftPaths;
+            if (diagScore > bestScore || (diagScore == bestScore && diagPaths > bestPaths)) {
+                bestScore = diagScore; bestPaths = diagPaths;
+            }
+        } else if (leftScore == diagScore) {
+            bestScore = leftScore;
+            bestPaths = leftPaths + diagPaths;
+            if (upScore > bestScore || (upScore == bestScore && upPaths > bestPaths)) {
+                bestScore = upScore; bestPaths = upPaths;
+            }
+        } else {
+            bestScore = upScore; bestPaths = upPaths;
+            if (leftScore > bestScore || (leftScore == bestScore && leftPaths > bestPaths)) {
+                bestScore = leftScore; bestPaths = leftPaths;
+            }
+            if (diagScore > bestScore || (diagScore == bestScore && diagPaths > bestPaths)) {
+                bestScore = diagScore; bestPaths = diagPaths;
             }
         }
 
-        if (bestScore == -1) {
-            maxScore[i][j] = 0;
-            ways[i][j] = 0;
-        } else {
-            maxScore[i][j] = bestScore;
-            ways[i][j] = totalWays;
-        }
-
-        return new int[]{maxScore[i][j], ways[i][j]};
+        tScore[i][j] = bestScore;
+        tPaths[i][j] = (int)(((long) bestPaths) % MOD);
+        return new int[]{tScore[i][j], tPaths[i][j]};
     }
 
     public int[] pathsWithMaxScore(List<String> board) {
-
         n = board.size();
+        tScore = new int[n][n];
+        tPaths = new int[n][n];
+        for (int[] row : tScore) Arrays.fill(row, -1);
 
-        maxScore = new Integer[n][n];
-        ways = new Integer[n][n];
-
-        int[] ans = solve(n - 1, n - 1, board);
-
-        if (ans[1] == 0)
-            return new int[]{0, 0};
-
-        return ans;
+        int[] result = solve(n - 1, n - 1, board);
+        return new int[]{result[0], result[1]};
     }
 }
