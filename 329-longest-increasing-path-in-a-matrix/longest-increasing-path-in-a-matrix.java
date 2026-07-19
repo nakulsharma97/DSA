@@ -1,40 +1,43 @@
 class Solution {
-    public int longestIncreasingPath(int[][] matrix) {
-        int m = matrix.length ;
-        int n = matrix[0].length ;
-        int visited[][]  = new int[m][n] ;
-        for(int row[] : visited) {
-            Arrays.fill(row , -1) ;
+    int dir [][] = {
+        {0 ,-1},
+        {1, 0},
+        {0 ,1},
+        {-1 , 0} 
+    };
+    public int dfs(int i , int j ,int[][] dp, int matrix[][]){
+        int row = matrix.length ;
+        int col = matrix[0].length ;
+        if(dp[i][j]  != -1){
+            return dp[i][j] ;
         }
-        int max = 0  ;
-        for(int i = 0 ; i < m ;i++){
-            for(int j = 0  ; j < n; j++){
-                max = Math.max(max , dfs(matrix , visited  , i ,j ,m, n)) ;
+        int max = 1 ;
+        for(int d[] : dir){
+            int ni = d[0] + i  ;
+            int nj = d[1] + j  ;
+            if(ni >= 0 && ni < row && nj >= 0 && nj < col && matrix[ni][nj] > matrix[i][j] ){
+         max = Math.max(max ,  1 + dfs(ni , nj , dp  , matrix)) ;
             }
         }
+        dp[i][j] = max ;
         return max ;
 
-    } 
-    public int dfs(int[][]matrix , int[][] visited , int row , int col , int m , int n){
-        if(visited[row][col] != -1) return visited[row][col] ;
-        int[][] dir = {
-            {0 , 1 },
-            {1 , 0},
-            {-1 , 0},
-            {0 , -1} 
-          } ;
-           int max = 1 ;
-          for(int i = 0 ; i<4 ;i++){
-            int newrow = row + dir[i][0] ;
-            int newcol = col + dir[i][1] ;
-           
-            if(newrow >= 0 && newrow < m && newcol >= 0 && newcol < n && matrix[newrow][newcol] > matrix[row][col])
-            {
-                max = Math.max( max , 1 + dfs(matrix , visited , newrow , newcol , m , n )) ;
-            }
-          }
-          visited[row][col] = max ;
-          return max ;
-
+    }
+    public int longestIncreasingPath(int[][] matrix) {
+        int row = matrix.length ;
+        int col = matrix[0].length ;
+        int ans = 0 ;
+        int max =  0 ;
+        int dp[][] = new int[row][col] ;
+        for(int r []  : dp ){
+            Arrays.fill(r , -1) ;
+        }
+        for(int i = 0 ; i< row ;i++){
+           for(int j = 0 ; j < col ;j++){
+            max = dfs(i , j ,dp, matrix ) ;
+            ans = Math.max(ans , max) ;
+           }
+        }
+        return ans  ;
     }
 }
