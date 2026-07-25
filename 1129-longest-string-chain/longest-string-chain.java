@@ -1,38 +1,43 @@
 class Solution {
-    public boolean check(String a, String b) {
-        int aa = a.length();
-        int bb = b.length();
-        if (aa != bb + 1)
-            return false;
-        int i = 0;
-        int j = 0;
-        while (aa > i && j < bb) {
-            if (a.charAt(i) == b.charAt(j)) {
-                j++;
-            }
-            i++;
-        }
-        return j == bb;
-    }
-
+    int t[][]  ;
     public int longestStrChain(String[] words) {
         int n = words.length  ;
-        int t[] = new int[n] ;
-        int max = 1 ;
-       Arrays.sort(words , (a , b) -> a.length() - b.length()) ;
-        for(int i = 0 ; i < n ;i++){
-            t[i] = 1  ;
+        t = new int[n][n+1] ;
+        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        
+         for(int row[] : t){
+            Arrays.fill(row , -1) ;
+         }
+         return list(words , -1 , 0) ;
+    }
+    int list(String[] words , int prev , int curr){
+        if (curr == words.length) {
+    return 0;
+}
+         if( t[curr][prev+1] != -1){
+            return t[curr][prev +1] ;
+         }
+         int take = 0 ;
+         if(prev == -1 || check(words[curr] , words[prev])){
+            take = 1 + list(words , curr , curr + 1) ;
+         }
+         int skip  = list(words , prev , curr +1) ;
+         return t[curr][prev+1] = Math.max(take , skip) ;
+    }
+    public boolean check(String large , String small){
+        int a = large.length() ;
+        int b =small.length() ;
+        if(a != b +1){
+          return false ;
         }
-        for(int i = 0 ; i< n;i++){
-            for(int j = 0 ; j < i ;j++){
-                 if(words[i].length() == words[j].length() + 1
-        && check(words[i], words[j])) {
-                 t[i] = Math.max(t[i] , t[j] +1) ;
-                 max = Math.max(max , t[i]) ;
-                }
+        int i = 0 ;
+        int j  = 0 ;
+        while(i < a ){
+            if(j < b && large.charAt(i) == small.charAt(j)){
+                j++ ;
             }
+            i++ ;
         }
-
-        return max  ;
+        return j == b ;
     }
 }
