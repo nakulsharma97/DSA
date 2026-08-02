@@ -10,7 +10,8 @@ class Solution {
             return true ;
         }
         int player1 = solve(0 , n-1 , nums) ; 
-       return player1 >= sum - player1;
+        int player2 = sum - player1 ;
+       return player1 >= player2;
     }
     public int solve(int i , int j , int[] nums){
         if(i > j){
