@@ -1,45 +1,57 @@
 class Solution {
-    int [] parent ;
-    int [] size ;
-    public int find(int x){
-        if(parent[x] != x){
-            parent[x] = find(parent[x]);
+    int rank[];
+    int parent[];
+
+    int find(int u) {
+        if (u == parent[u]) {
+            return u;
         }
-        return parent[x] ;
+        parent[u] = find(parent[u]);
+        return parent[u];
     }
-    public void  union(int x , int y){
-        int px = find(x) ;
-        int py = find(y)  ;
-        if(px != py){
-            if(size[px] < size[py]){
-                parent[px] = py ;
-                size[py] += size[px] ;
-            }
-            else {
-                parent[py] =  px  ;
-                size[px] += size[px] ;
-            }
+
+    void union(int x , int y){
+        int parentx = find(x) ;
+        int parenty = find(y) ;
+        if(rank[parentx] < rank[parenty]){
+            parent[parentx] = parenty ;
         }
-    }
-       public boolean equationsPossible(String[] equations) {
-        parent = new int[26] ;
-        size = new int[26] ;
-        for(int i = 0 ; i < 26 ;i++){
-            parent[i] = i ;
-            size[i] = 1 ;
+        else if(rank[parenty] < rank[parentx]){
+            parent[parenty] = parentx ;
+        }
+        else {
+            parent[parenty] = parentx ;
+            rank[parentx]++ ;
+        }
+     }
+
+    public boolean equationsPossible(String[] equations) {
+        rank = new int[26];
+        parent = new int[26];
+        for (int i = 0; i < 26; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+        for (String s : equations) {
+            char ch = s.charAt(1);
+            char u = s.charAt(0);
+            char v = s.charAt(3);
+            if (ch == '=') {
+                union(u - 'a', v - 'a');
+            }
         }
         for(String s : equations){
-            if(s.charAt(1) == '='){
-                union(s.charAt(0) - 'a' , s.charAt(3) - 'a') ;
-            }
-        }
-        for(String s : equations){
-            if(s.charAt(1) == '!'){
-                if(find(s.charAt(0) - 'a') == find(s.charAt(3) - 'a')){
-                    return false ;
+            char ch = s.charAt(1) ;
+            char u = s.charAt(0);
+            char v = s.charAt(3) ;
+             if (ch == '!') {
+                int parentu = find(u - 'a');
+                int parenty = find(v - 'a');
+                if (parentu == parenty) {
+                    return false;
                 }
             }
         }
-        return true  ;
+        return true;
     }
 }
