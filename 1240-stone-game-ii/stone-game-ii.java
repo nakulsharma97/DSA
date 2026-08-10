@@ -1,41 +1,33 @@
 class Solution {
-    private int n;
-    private int[][][] t = new int[2][101][101]; // t[2][n+1][n+1] ~ O(n^3)
-    
-    private int solveForAlice(int[] piles, int person, int i, int M) {
-        if (i >= n) {
-            return 0;
-        }
-        
-        if (t[person][i][M] != -1) {
-            return t[person][i][M];
-        }
-        
-        int result = (person == 1) ? -1 : Integer.MAX_VALUE;
-        int stones = 0;
-        
-        for (int x = 1; x <= Math.min(2 * M, n - i); x++) {
-            stones += piles[i + x - 1];
-            
-            if (person == 1) { // Alice
-                result = Math.max(result, stones + solveForAlice(piles, 0, i + x, Math.max(M, x)));
-            } else { // Bob
-                result = Math.min(result, solveForAlice(piles, 1, i + x, Math.max(M, x)));
-            }
-        }
-        
-        return t[person][i][M] = result;
-    }
-    
+    int dp[][][] = new int[2][101][101] ;
+    int n ;
     public int stoneGameII(int[] piles) {
-        n = piles.length;
-        
-        for (int[][] arr2D : t) {
-            for (int[] arr1D : arr2D) {
-                Arrays.fill(arr1D, -1);
+        n = piles.length ;
+        for(int a[][] : dp){
+            for(int b[] : a){
+                Arrays.fill(b , -1);
             }
         }
-        
-        return solveForAlice(piles, 1, 0, 1);
+        return solve(0 , 1  , 1 , piles) ;
+    }
+    public int solve(int i , int per , int m , int piles[]){
+        if(i >= n){
+            return 0 ;
+        }
+        if(dp[per][i][m] != -1){
+            return dp[per][i][m] ;
+        }
+        int result = (per == 1) ? -1 : Integer.MAX_VALUE ;
+        int stone = 0;
+        for(int x = 1 ; x <= Math.min(2*m , n - i); x++){
+           stone += piles[i + x -1] ;
+           if(per == 1){
+            result = Math.max(result , stone + solve(i + x , 0 , Math.max(x , m ) , piles));
+           }
+           else {
+            result = Math.min(result ,  solve(i +x, 1 ,Math.max(x , m), piles));
+           }
+        }
+        return dp[per][i][m] = result ;
     }
 }
