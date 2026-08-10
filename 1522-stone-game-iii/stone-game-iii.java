@@ -21,7 +21,7 @@ class Solution {
            else if (alice < bob) {
     return "Bob";
      } else {
-    return "Tie";
+     return "Tie"  ;
      }
      }
 
