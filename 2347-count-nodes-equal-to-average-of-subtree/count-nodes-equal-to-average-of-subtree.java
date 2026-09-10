@@ -14,32 +14,26 @@
  * }
  */
 class Solution {
-    int ans = 0 ;
+    int ans = 0  ;
     public int averageOfSubtree(TreeNode root) {
         if(root == null){
             return 0 ;
         }
-        int sum = getsum(root) ;
-        int count = getcount(root) ;
+        dfs(root) ;
+        return ans  ;
         
+    }
+    public int[]  dfs(TreeNode root){
+        if(root == null){
+            return  new int[]{0 ,0} ;
+        }
+        int left[] = dfs(root.left) ;
+        int right[] = dfs(root.right) ;
+        int sum = left[0]  + right[0] + root.val ;
+        int count = left[1] + right[1] + 1  ;
         if(sum / count == root.val){
             ans++ ;
         }
-        averageOfSubtree(root.left) ;
-        averageOfSubtree(root.right) ;
-        return ans ;
-        
-    }
-    public int getsum(TreeNode root){
-        if(root == null){
-            return 0 ;
-        }
-        return root.val + getsum(root.left) + getsum(root.right) ;
-    }
-    public int getcount(TreeNode root){
-        if(root == null){
-            return 0 ;
-        }
-        return 1 + getcount(root.left) + getcount(root.right) ;
+        return new int[]{sum , count} ;
     }
 }
