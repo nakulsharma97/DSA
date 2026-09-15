@@ -1,30 +1,31 @@
 class Solution {
     public int maxPalindromes(String s, int k) {
-        int n = s.length();
-        int ans = 0;
-        int left = 0;
-        while (left <= n - k) {
-            if (isPalindrome(s, left, left + k - 1)) {
-                ans++;
-                left += k;              // yahi "right" jump hai
+        int n = s.length() ;
+        int ans = 0 ;
+        int left = 0 ;
+        while(left <= n - k){
+            if(ispalin(s , left , left + k -1)){
+                ans++ ;
+                left = left + k ;
             }
-            else if (left <= n - k - 1 && isPalindrome(s, left, left + k)) {
-                ans++;
-                left += k + 1;
+            else if(left <= n - k -1  && ispalin(s , left , left + k )){
+                ans++ ;
+                left = left + k + 1 ;
             }
             else {
-                left++;
+                left++ ;
             }
         }
-        return ans;
+        return ans ;
     }
-
-    private boolean isPalindrome(String s, int l, int r) {
-        while (l < r) {
-            if (s.charAt(l) != s.charAt(r)) return false;
-            l++;
-            r--;
+    public boolean ispalin(String s , int i , int n ){
+        while(i < n){
+            if(s.charAt(i) != s.charAt(n)){
+                return false ;
+            }
+            i++ ; 
+            n-- ;
         }
-        return true;
+        return true ;
     }
 }
