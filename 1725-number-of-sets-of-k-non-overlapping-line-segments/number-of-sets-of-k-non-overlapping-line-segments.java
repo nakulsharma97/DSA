@@ -1,49 +1,22 @@
 class Solution {
-
-    static final long MOD = 1_000_000_007;
-
-    public int numberOfSets(int n, int k) {
-
-        int N = n + k - 1;
-        int R = 2 * k;
-
-        long[] fact = new long[N + 1];
-        long[] invFact = new long[N + 1];
-
-        fact[0] = 1;
-
-        for (int i = 1; i <= N; i++) {
-            fact[i] = fact[i - 1] * i % MOD;
+    int mod = 1000000000 +  7 ;
+    public int numberOfSets(int n, int K) {
+        int dp[][] = new int[1001][1001] ;
+        for(int i = 0 ; i <= n-1 ;i++){
+            dp[0][i] = 1 ;
         }
 
-        invFact[N] = power(fact[N], MOD - 2);
-
-        for (int i = N - 1; i >= 0; i--) {
-            invFact[i] = invFact[i + 1] * (i + 1) % MOD;
-        }
-
-        long ans = fact[N];
-
-        ans = ans * invFact[R] % MOD;
-        ans = ans * invFact[N - R] % MOD;
-
-        return (int) ans;
-    }
-
-    private long power(long a, long b) {
-
-        long result = 1;
-
-        while (b > 0) {
-
-            if ((b & 1) == 1) {
-                result = result * a % MOD;
+        for(int k = 1 ; k <= K ;k++){
+            int prev[] = new int[n+1] ;
+            for(int x= n-1 ; x >= 0 ;x--){
+                prev[x] = (prev[x+1] + dp[k-1][x] ) % mod ;
             }
-
-            a = a * a % MOD;
-            b >>= 1;
+            for(int i = n -1 ; i >= 0 ;i--){
+                 int take =  prev[i+1] % mod;
+                 int skip = dp[k][i+1] % mod ;
+                 dp[k][i] = (take + skip) % mod ;
+            }
         }
-
-        return result;
+        return dp[K][0] ;
     }
 }
