@@ -3,10 +3,10 @@ class Solution {
         int n  = s.length() ;
         Stack<Integer> st = new Stack<>() ;
         st.push(-1) ;
-        int ans = 0  ;
-        for(int i = 0 ; i< n ;i++){
-            char c= s.charAt(i) ;
-            if(c == '('){
+        int ans =  0 ;
+        for(int i = 0 ; i < n ;i++){
+            char ch = s.charAt(i) ;
+            if(ch == '('){
                 st.push(i) ;
             }
             else {
@@ -15,7 +15,7 @@ class Solution {
                     st.push(i) ;
                 }
                 else {
-                    ans = Math.max(ans , i - st.peek() ) ;
+                    ans = Math.max(ans , i - st.peek()) ;
                 }
             }
         }
