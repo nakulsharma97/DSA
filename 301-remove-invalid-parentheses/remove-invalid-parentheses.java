@@ -1,67 +1,46 @@
-import java.util.*;
 class Solution {
-    Set<String> result = new HashSet<>();
-    int minRemovals = Integer.MAX_VALUE;
-
+    int n ;
+    HashSet<String> res = new HashSet<>() ;
+    int maxrem = Integer.MAX_VALUE ;
     public List<String> removeInvalidParentheses(String s) {
-        dfs(s, 0, 0, 0, new StringBuilder());
-        return new ArrayList<>(result);
+        n = s.length() ;
+        
+        dfs(0 , 0 , 0 , new StringBuilder() , s );
+        return new ArrayList<>(res) ;
     }
-
-    private void dfs(String s, int index, int balance,
-                     int removals, StringBuilder current) {
-
-        if (removals > minRemovals) {
+    public void dfs(int ind , int balance , int removal , StringBuilder cur , String s){
+         if (removal > maxrem) {
             return;
         }
-
-        if (index == s.length()) {
-
-            if (balance == 0) {
-
-                if (removals < minRemovals) {
-                    minRemovals = removals;
-                    result.clear();
+        if(ind >= n){
+            if(balance == 0){
+                if(removal < maxrem){
+                    maxrem = removal ;
+                    res.clear();
                 }
-
-                if (removals == minRemovals) {
-                    result.add(current.toString());
+                if(removal == maxrem){
+                    res.add(cur.toString()) ;
                 }
             }
-
-            return;
+            return ;
         }
-
-        char ch = s.charAt(index);
-        if (ch != '(' && ch != ')') {
-            current.append(ch);
-            dfs(s, index + 1, balance, removals, current);
-            current.deleteCharAt(current.length() - 1);
+        if(s.charAt(ind) != '(' && s.charAt(ind) != ')'){
+            cur.append(s.charAt(ind)) ;
+            dfs(ind + 1, balance , removal  , cur , s) ;
+            cur.deleteCharAt(cur.length() -1) ;
         }
-
-        
-        else if (ch == '(') {
-
-            dfs(s, index + 1, balance, removals + 1, current);
-
-            current.append(ch);
-
-            dfs(s, index + 1, balance + 1, removals, current);
-
-            current.deleteCharAt(current.length() - 1);
+       else  if(s.charAt(ind) == '('){
+            dfs(ind + 1 , balance  , removal +1 , cur , s) ;
+            cur.append(s.charAt(ind)) ;
+            dfs(ind + 1 ,balance +1 ,removal  , cur, s) ;
+            cur.deleteCharAt(cur.length() -1) ;
         }
-
         else {
-
-            dfs(s, index + 1, balance, removals + 1, current);
-
-            if (balance > 0) {
-
-                current.append(ch);
-
-                dfs(s, index + 1, balance - 1, removals, current);
-
-                current.deleteCharAt(current.length() - 1);
+            dfs(ind + 1 , balance , removal  +1 , cur , s ) ;
+            if(balance > 0){
+                cur.append(s.charAt(ind)) ;
+                dfs(ind + 1 , balance - 1 , removal , cur , s) ;
+                cur.deleteCharAt(cur.length()  -1) ;
             }
         }
     }
