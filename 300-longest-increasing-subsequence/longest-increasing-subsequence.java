@@ -1,26 +1,30 @@
 class Solution {
+    int n ;
+    int dp[][] ; 
     public int lengthOfLIS(int[] nums) {
-     List<Integer> list = new ArrayList<>();
-     int n = nums.length ;
-     for(int num : nums){
-        int low = 0 ;
-        int high = list.size() -1 ;
-        while(low <= high){
-            int mid = low + (high - low ) / 2 ;
-            if(list.get(mid) < num){
-                low = mid + 1 ;
-            }
-            else {
-             high = mid -1 ;
-            }
+        n = nums.length ;
+        dp = new int[n+1][n+1] ;
+        for(int row[] : dp){
+            Arrays.fill(row , -1) ;
         }
-        if(low == list.size()){
-            list.add(num) ;
+        return solve(0 , -1 , nums) ;
+    }
+    public int solve(int i , int p , int nums[]){
+        if( i >= n){
+            return 0;
         }
-        else {
-            list.set(low , num) ;
+        if(p != -1 && dp[i][p+1] != -1){
+            return dp[i][p+1] ;
         }
-     }   
-     return list.size() ;
+        int take = 0 ;
+        if(p == -1 || nums[p] < nums[i]){
+            take = 1 + solve(i +  1 , i , nums) ;
+        }
+        int skip = solve(i +1 , p , nums);
+        if(p != -1){
+         dp[i][p+1] = Math.max(take , skip) ;
+        }
+         return Math.max(take , skip) ;
+   
     }
 }
